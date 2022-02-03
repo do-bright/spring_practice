@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -26,7 +28,11 @@ public abstract class Item {
 
     // 추가로 상속 관계 (Album, Book, Movie) 만들어주기 (각각 클래스 java로 생성)
 
+    // Category, Item 다대다 관계
+    @ManyToMany(mappedBy = "items")
+    private List<Category> categories = new ArrayList<>();
 
 
-    // 주문 엔티티대로 작성 ; id name price:int stockQuantity categories:List + Album, Book, Movie 상속 관계
+
+    // 상품 엔티티대로 작성 ; id name price:int stockQuantity categories:List + Album, Book, Movie 상속 관계
 }

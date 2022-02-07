@@ -1,6 +1,8 @@
 package jpabook.jpashop.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.aspectj.weaver.ast.Or;
 
@@ -12,6 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders") // 아래 클래스 이름이랑 분리해주기 위해서 orders 로 함
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
 
     @Id @GeneratedValue
@@ -63,7 +66,7 @@ public class Order {
     // 주문 엔티티대로 작성 ; id member:Member orderItems:List delivery:Delivery orderDate:Date status:OrderStatus
 
     // == 생성 매서드 == //
-    public static Order createdOrder(Member member, Delivery delivery, OrderItem... orderItems){ // ... = 여러개 넘긴다
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems){ // ... = 여러개 넘긴다
         Order order = new Order();
         order.setMember(member);
         order.setDelivery(delivery);

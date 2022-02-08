@@ -4,7 +4,7 @@ package jpabook.jpashop.domain.item;
 
 import jpabook.jpashop.exception.NotEnoughStockException;
 import lombok.Getter;
-//import lombok.Setter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.List;
 // InheritanceType 눌러서 가보면 여러 종류들(Single_Table, Table_Per_Class. Joined) 있는데 우리는 그 중에서 single table를 써줄거다 라고 명시
 // Joined 정규화(각각의 테이블로 변환), Single_Table 한 테이블에 다 때려 박기(통합 테이블로 변환), Table_per_class 서브타입 테이블로 변환하는 구현 클래스마다 테이블 생성
 @DiscriminatorColumn(name="dtype") // 이거로(dtype) 구분할거다 라고 명시
-@Getter //@Setter
+@Getter @Setter
 public abstract class Item {
 
     @Id

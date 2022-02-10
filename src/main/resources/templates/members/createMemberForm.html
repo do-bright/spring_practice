@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+ .fieldError {
+ border-color: #bd2130;
+ }
+</style>
+<body>
+<div class="container">
+  <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+  <form role="form" action="/members/new" th:object="${memberForm}" method="post">
+<!--    아래 폼은 post 형식-->
+<!--    url 인 /members/new는 get 방식 (MemberController 보면 @GetMapping 으로 되어 있음)-->
+<!--    MemberController를 타서 createMemberForm이 열림 + 렌더링, 컨트롤러에서 model.addAttribute로 memberForm을 넘겼었음 따라서 화면에서 접근 가능-->
+
+<!--    th는 타임리프 문법 => 해당 폼 안에서 memberForm 객체를 쓰겠다 $ 명시 => th:object="${memberForm}"-->
+    <div class="form-group">
+      <label th:for="name">이름</label>
+      <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력하세요"
+             th:class="${#fields.hasErrors('name')}? 'form-control fieldError' : 'form-control'">
+            <!-- 이름에 에러가 있으면 위에서 기재한 fieldError css 적용함 (에러 색깔 주기용)-->
+      <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect date</p>
+<!--      객체안의 name을 쓰겠다 * 명시 => *{name}-->
+<!--       + name 필드에 대한 에러 메세지를 뽑아서 출력 => th:errors="*{name}" (에러 메세지 주기용)-->
+    </div>
+    <div class="form-group">
+      <label th:for="city">도시</label>
+      <input type="text" th:field="*{city}" class="form-control" placeholder="도시를 입력하세요">
+<!--      th:field 를 사용하면 html에서 id와 name을 자동으로 지정해줌 (Form object에 있는 변수들임-->
+<!--      ex) <input type="text" class="form-control" placeholder="도시를 입력하세요" id="city" name="city">-->
+    </div>
+    <div class="form-group">
+      <label th:for="street">거리</label>
+      <input type="text" th:field="*{street}" class="form-control" placeholder="거리를 입력하세요">
+    </div>
+    <div class="form-group">
+      <label th:for="zipcode">우편번호</label>
+      <input type="text" th:field="*{zipcode}" class="form-control" placeholder="우편번호를 입력하세요">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <br/>
+  <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>

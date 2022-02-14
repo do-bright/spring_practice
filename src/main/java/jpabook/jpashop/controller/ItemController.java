@@ -46,7 +46,7 @@ public class ItemController {
     }
 
     @GetMapping("items/{itemId}/edit")
-    public String updateItemForm(@PathVariable("itemId") Long itemId, Model model) { // item의 Id 에 따라 올 url 이 다르니까 -> @PathVariable 사용
+    public String updateItem(@PathVariable("itemId") Long itemId, Model model) { // item의 Id 에 따라 올 url 이 다르니까 -> @PathVariable 사용
         Book item = (Book) itemService.findOne(itemId);
 
         BookForm form = new BookForm(); // 업데이트 (수정)할 때 Book entity를 보내는 게 아니라 Book form을 보낼 것임

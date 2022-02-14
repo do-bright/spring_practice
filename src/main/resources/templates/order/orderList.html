@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div>
+
+        <!--        회원명 주문상태 선택 후 검색 부분-->
+        <div>
+            <form th:object="${orderSearch}" class="form-inline">
+            <!-- object로 orderSearch 지정 -> OrderController에서 public String orderList(@ModelAttribute("orderSearch") 이 부분임 -->
+                <div class="form-group mb-2">
+                    <input type="text" th:field="*{memberName}" class="formcontrol" placeholder="회원명"/>
+                </div>
+                <div class="form-group mx-sm-1 mb-2">
+                    <select th:field="*{orderStatus}" class="form-control">
+                        <option value="">주문상태</option>
+                        <!-- 주문 상태를 order cancel로 나눠서 볼 수 있도록 바꾸기-->
+                        <option th:each="status : ${T(jpabook.jpashop.domain.OrderStatus).values()}"
+                                th:value="${status}"
+                                th:text="${status}">option
+                        </option>
+                        <!-- 타임리프에서 문법을 써서 결과 화면에 뿌리기-->
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">검색</button>
+                <!-- 검색을 누르면 submit이 됌 -> OrderController - GetMapping("/orders")로 값이 넘어가서 처리됌 -> 해당하는 회원이름 주문 상태 조회 -->
+                <!-- GetMapping이라 파라미터로 넘어감 ex) 회원 이름 test, 주문 상태 order 면 -> localhost:8080/orders?memberName=test&orderStatus=ORDER -->
+            </form>
+        </div>
+
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>회원명</th>
+                <th>대표상품 이름</th>
+                <th>대표상품 주문가격</th>
+                <th>대표상품 주문수량</th>
+                <th>상태</th>
+                <th>일시</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${orders}">
+            <!-- OrderController 보면  List<Order> orders = orderService.finddOrders(orderSearch);
+                model.addAttribute("orders",orders); 되어있음 이걸 루프 돌면서 뿌리기 (orders를 item으로 바꿔서) -->
+                <td th:text="${item.id}"></td>
+                <td th:text="${item.member.name}"></td>
+                <td th:text="${item.orderItems[0].item.name}"></td>
+                <td th:text="${item.orderItems[0].orderPrice}"></td>
+                <td th:text="${item.orderItems[0].count}"></td>
+                <td th:text="${item.status}"></td>
+                <td th:text="${item.orderDate}"></td>
+                <td>
+<!--                    주문 취소는 상태가 만약 order면 노출이 됌-->
+<!--                    버튼 누르면 아래의 자바스크립트 호출함-->
+                    <a th:if="${item.status.name() == 'ORDER'}" href="#"
+                       th:href="'javascript:cancel('+${item.id}+')'"
+                       class="btn btn-danger">CANCEL</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+<script>
+     function cancel(id) {
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+<!--        form을 post로 해서 orders의 cancel을 호출함 -> @PostMapping("/orders/{orderId}/cancel")-->
+        form.setAttribute("action", "/orders/" + id + "/cancel");
+        document.body.appendChild(form);
+        form.submit();
+     }
+</script>
+</html>

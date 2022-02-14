@@ -1,5 +1,6 @@
 package jpabook.jpashop.service;
 
+import jpabook.jpashop.domain.item.Book;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,15 @@ public class ItemService {
     // 하지만 명시를 하면 false (원래 Transactional의 기본 값)으로 줄 수 있음
     public void saveItem(Item item){
         itemRepository.save(item);
+    }
+
+    @Transactional
+    public void updateItem(Long itemId, Book param){
+        Item findItem = itemRepository.findOne(itemId);
+        findItem.setPrice(param.getPrice()); // Param에서 필요한 걸 꺼냄
+        findItem.setName(param.getName());
+        findItem.setStockQuantity(param.getStockQuantity());
+        // itemRepository.save(findItem); 다음을 호출 할 필요가 없음
     }
 
     public List<Item> findItems(){
